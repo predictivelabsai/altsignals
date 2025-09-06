@@ -18,4 +18,12 @@ black
 pytest
 polygon-api-client
 psycopg2-binary
+tweepy
+praw
+pytrends
+python-fasthtml
+uvicorn
+langchain-community
+langchain-experimental
+textblob
 
