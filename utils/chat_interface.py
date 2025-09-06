@@ -218,14 +218,19 @@ class FinancialChatInterface:
     def ask_question(self, question: str) -> Dict[str, Any]:
         """Ask a natural language question about the financial data."""
         try:
-            logger.info(f"Processing question: {question}")
+            # Clean the question to handle Unicode characters
+            clean_question = question.encode('ascii', 'ignore').decode('ascii')
+            if not clean_question.strip():
+                clean_question = "What data do we have?"
+            
+            logger.info(f"Processing question: {clean_question}")
             
             # Format table info for the prompt
             table_info_str = self.format_table_info_for_prompt()
             
             # Use the SQL chain to process the question
             result = self.sql_chain({
-                "query": question,
+                "query": clean_question,
                 "table_info": table_info_str
             })
             

@@ -401,6 +401,11 @@ def display_detailed_data(sentiment_data):
             file_name=f"social_sentiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
             mime="application/json"
         )
+    
+    # Footer with data source information
+    st.markdown("---")
+    st.markdown("**📱 Social Media Sentiment Analysis** | 💭 **SYNTHETIC DATA**: Generated for demonstration purposes")
+    st.markdown("⚠️ *This page uses SYNTHETIC social media data. In production, this would connect to real Twitter/Reddit APIs.*")
 
 if __name__ == "__main__":
     main()

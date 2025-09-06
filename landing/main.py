@@ -1,8 +1,7 @@
 from fasthtml.common import *
 
-# Add Tailwind CSS
-tlink = Link(rel="stylesheet", href="https://cdn.tailwindcss.com")
-app, rt = fast_app(hdrs=(tlink,))
+# Create app with inline CSS to ensure styling works
+app, rt = fast_app()
 
 @rt("/")
 def get():
@@ -13,329 +12,777 @@ def get():
             Meta(name="viewport", content="width=device-width, initial-scale=1"),
             Link(rel="stylesheet", href="https://cdn.tailwindcss.com"),
             Style("""
-                .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-                .card-hover:hover { transform: translateY(-2px); transition: all 0.3s ease; }
-                .text-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+                
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                }
+                
+                body {
+                    line-height: 1.6;
+                    color: #374151;
+                    background-color: #ffffff;
+                }
+                
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 20px;
+                }
+                
+                .header {
+                    background: white;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                    position: sticky;
+                    top: 0;
+                    z-index: 50;
+                    border-bottom: 1px solid #e5e7eb;
+                }
+                
+                .nav {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                }
+                
+                .logo {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: #1f2937;
+                    text-decoration: none;
+                }
+                
+                .nav-links {
+                    display: flex;
+                    gap: 2rem;
+                    align-items: center;
+                }
+                
+                .nav-link {
+                    color: #6b7280;
+                    text-decoration: none;
+                    font-weight: 500;
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.375rem;
+                    transition: color 0.2s;
+                }
+                
+                .nav-link:hover {
+                    color: #1f2937;
+                }
+                
+                .btn-primary {
+                    background: #f97316;
+                    color: white;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0.5rem;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: background-color 0.2s;
+                    border: none;
+                    cursor: pointer;
+                }
+                
+                .btn-primary:hover {
+                    background: #ea580c;
+                }
+                
+                .btn-secondary {
+                    background: #10b981;
+                    color: white;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0 0.5rem 0.5rem 0;
+                    border: none;
+                    cursor: pointer;
+                    font-weight: 600;
+                }
+                
+                .hero {
+                    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                    padding: 5rem 0;
+                }
+                
+                .hero-content {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 3rem;
+                    align-items: center;
+                }
+                
+                .hero-text h1 {
+                    font-size: 3.5rem;
+                    font-weight: 700;
+                    color: #1f2937;
+                    line-height: 1.1;
+                    margin-bottom: 1.5rem;
+                }
+                
+                .hero-text p {
+                    font-size: 1.25rem;
+                    color: #6b7280;
+                    margin-bottom: 2rem;
+                    line-height: 1.6;
+                }
+                
+                .search-bar {
+                    display: flex;
+                    margin-bottom: 2rem;
+                    max-width: 400px;
+                }
+                
+                .search-input {
+                    flex: 1;
+                    padding: 0.75rem 1rem;
+                    border: 2px solid #d1d5db;
+                    border-radius: 0.5rem 0 0 0.5rem;
+                    font-size: 1rem;
+                    outline: none;
+                }
+                
+                .search-input:focus {
+                    border-color: #10b981;
+                }
+                
+                .tag-group {
+                    margin-bottom: 1rem;
+                }
+                
+                .tag-label {
+                    color: #6b7280;
+                    font-weight: 500;
+                    margin-right: 0.5rem;
+                }
+                
+                .tag {
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    margin: 0.25rem;
+                    border-radius: 1rem;
+                    text-decoration: none;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    transition: all 0.2s;
+                }
+                
+                .tag-blue { background: #dbeafe; color: #1e40af; }
+                .tag-green { background: #dcfce7; color: #166534; }
+                .tag-purple { background: #f3e8ff; color: #7c3aed; }
+                .tag-orange { background: #fed7aa; color: #c2410c; }
+                .tag-pink { background: #fce7f3; color: #be185d; }
+                .tag-yellow { background: #fef3c7; color: #d97706; }
+                
+                .tag:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+                
+                .dashboard-mockup {
+                    background: white;
+                    border-radius: 1rem;
+                    padding: 2rem;
+                    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+                    border: 1px solid #e5e7eb;
+                }
+                
+                .dashboard-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+                }
+                
+                .dashboard-title {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: #1f2937;
+                }
+                
+                .status-dot {
+                    width: 12px;
+                    height: 12px;
+                    background: #10b981;
+                    border-radius: 50%;
+                }
+                
+                .chart-area {
+                    background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+                    border-radius: 0.5rem;
+                    padding: 1.5rem;
+                    margin-bottom: 1.5rem;
+                    height: 150px;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .chart-line {
+                    position: absolute;
+                    top: 50%;
+                    left: 10%;
+                    right: 10%;
+                    height: 3px;
+                    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+                    border-radius: 2px;
+                    transform: translateY(-50%);
+                }
+                
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 1rem;
+                    text-align: center;
+                }
+                
+                .stat-value {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: #059669;
+                }
+                
+                .stat-label {
+                    font-size: 0.875rem;
+                    color: #6b7280;
+                }
+                
+                .cards-section {
+                    padding: 4rem 0;
+                    background: #f9fafb;
+                }
+                
+                .cards-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 1.5rem;
+                }
+                
+                .card {
+                    background: white;
+                    border-radius: 0.75rem;
+                    padding: 1.5rem;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    border: 1px solid #e5e7eb;
+                    transition: all 0.3s ease;
+                }
+                
+                .card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                }
+                
+                .card-badge {
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 1rem;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    margin-bottom: 0.75rem;
+                }
+                
+                .badge-purple { background: #f3e8ff; color: #7c3aed; }
+                .badge-orange { background: #fed7aa; color: #c2410c; }
+                .badge-green { background: #dcfce7; color: #166534; }
+                .badge-pink { background: #fce7f3; color: #be185d; }
+                
+                .card-title {
+                    font-weight: 700;
+                    color: #1f2937;
+                    margin-bottom: 0.5rem;
+                }
+                
+                .card-value {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #1f2937;
+                }
+                
+                .card-change {
+                    color: #059669;
+                    font-weight: 600;
+                    margin-left: 0.5rem;
+                }
+                
+                .section {
+                    padding: 5rem 0;
+                }
+                
+                .section-alt {
+                    background: #f9fafb;
+                }
+                
+                .section-dark {
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    color: white;
+                }
+                
+                .section-title {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    color: #1f2937;
+                    margin-bottom: 1.5rem;
+                }
+                
+                .section-text {
+                    font-size: 1.125rem;
+                    color: #6b7280;
+                    line-height: 1.7;
+                    margin-bottom: 2rem;
+                }
+                
+                .two-column {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 3rem;
+                    align-items: center;
+                }
+                
+                .stats-grid-large {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 2rem;
+                    text-align: center;
+                }
+                
+                .stat-large {
+                    font-size: 3rem;
+                    font-weight: 700;
+                    color: white;
+                    margin-bottom: 0.5rem;
+                }
+                
+                .stat-desc {
+                    color: #94a3b8;
+                }
+                
+                .testimonial {
+                    background: white;
+                    border-radius: 1rem;
+                    padding: 2rem;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    border: 1px solid #e5e7eb;
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+                
+                .testimonial-text {
+                    font-size: 1.125rem;
+                    color: #374151;
+                    font-style: italic;
+                    line-height: 1.7;
+                    margin-bottom: 1.5rem;
+                }
+                
+                .testimonial-author {
+                    display: flex;
+                    align-items: center;
+                }
+                
+                .author-avatar {
+                    width: 48px;
+                    height: 48px;
+                    background: #3b82f6;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: 700;
+                    margin-right: 1rem;
+                }
+                
+                .author-name {
+                    font-weight: 700;
+                    color: #1f2937;
+                }
+                
+                .author-title {
+                    color: #6b7280;
+                }
+                
+                .footer {
+                    background: #f9fafb;
+                    padding: 3rem 0;
+                    border-top: 1px solid #e5e7eb;
+                    text-align: center;
+                    color: #6b7280;
+                }
+                
+                .text-center { text-align: center; }
+                
+                @media (max-width: 768px) {
+                    .hero-content,
+                    .two-column {
+                        grid-template-columns: 1fr;
+                        gap: 2rem;
+                    }
+                    
+                    .hero-text h1 {
+                        font-size: 2.5rem;
+                    }
+                    
+                    .nav-links {
+                        display: none;
+                    }
+                    
+                    .cards-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .stats-grid-large {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
             """)
         ),
         Body(
             # Header
             Header(
-                Nav(
+                cls="header",
+                children=[
                     Div(
-                        # Logo
-                        A(
-                            Div(
-                                Span("⚡", cls="text-2xl mr-2"),
-                                Span("AltSignals", cls="text-xl font-bold text-gray-800"),
-                                cls="flex items-center"
-                            ),
-                            href="/", 
-                            cls="flex items-center"
-                        ),
-                        
-                        # Desktop Navigation
-                        Div(
-                            A("Datasets", href="#", cls="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"),
-                            A("Top Stocks", href="#", cls="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"),
-                            A("Stock Alerts", href="#", cls="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"),
-                            A("AI Stock Picks", href="#", cls="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"),
-                            cls="hidden md:flex space-x-4"
-                        ),
-                        
-                        # Auth buttons
-                        Div(
-                            A("Log in", href="#", cls="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md text-sm font-medium"),
-                            A("Sign up", href="#", cls="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium ml-2"),
-                            cls="flex items-center"
-                        ),
-                        
-                        cls="flex justify-between items-center"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="bg-white shadow-sm border-b"
+                        cls="container",
+                        children=[
+                            Nav(
+                                cls="nav",
+                                children=[
+                                    A("⚡ AltSignals", href="/", cls="logo"),
+                                    Div(
+                                        cls="nav-links",
+                                        children=[
+                                            A("Datasets", href="#", cls="nav-link"),
+                                            A("Top Stocks", href="#", cls="nav-link"),
+                                            A("Stock Alerts", href="#", cls="nav-link"),
+                                            A("AI Stock Picks", href="#", cls="nav-link"),
+                                            A("Log in", href="#", cls="nav-link"),
+                                            A("Sign up", href="#", cls="btn-primary"),
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
             # Hero Section
             Section(
-                Div(
+                cls="hero",
+                children=[
                     Div(
-                        # Left side - Content
-                        Div(
-                            H1("Make Better Investment Decisions With Better Data", cls="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"),
-                            P("Get unique AI stock picks, stock alerts, and thousands of alternative insights. Complement your due diligence with AltSignals.", cls="text-xl text-gray-600 mb-8 leading-relaxed"),
-                            
-                            # Search bar
+                        cls="container",
+                        children=[
                             Div(
-                                Input(
-                                    placeholder="Search Stocks & Companies",
-                                    cls="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                                ),
-                                Button(
-                                    "🔍",
-                                    cls="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-r-lg font-medium"
-                                ),
-                                cls="flex mb-6 max-w-md"
-                            ),
-                            
-                            P(
-                                "Or ",
-                                A("Sign up", href="#", cls="text-red-500 font-medium hover:text-red-600"),
-                                " (for free) to get started.",
-                                cls="text-gray-600 mb-8"
-                            ),
-                            
-                            # Popular links
-                            Div(
-                                Div(
-                                    Span("Popular Stocks: ", cls="text-gray-600 mr-2"),
-                                    A("Tesla", href="#", cls="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm mr-2 hover:bg-blue-200"),
-                                    A("Apple", href="#", cls="bg-green-100 text-green-800 px-2 py-1 rounded text-sm mr-2 hover:bg-green-200"),
-                                    A("Nvidia", href="#", cls="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm hover:bg-purple-200"),
-                                    cls="mb-3"
-                                ),
-                                Div(
-                                    Span("Trending Stocks: ", cls="text-gray-600 mr-2"),
-                                    A("Reddit Stocks", href="#", cls="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm mr-2 hover:bg-orange-200"),
-                                    A("Top Gainers", href="#", cls="bg-pink-100 text-pink-800 px-2 py-1 rounded text-sm mr-2 hover:bg-pink-200"),
-                                    A("Penny Stocks", href="#", cls="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm hover:bg-yellow-200"),
-                                    cls="mb-3"
-                                ),
-                                Div(
-                                    Span("Popular Crypto: ", cls="text-gray-600 mr-2"),
-                                    A("Bitcoin", href="#", cls="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm mr-2 hover:bg-yellow-200"),
-                                    A("Ethereum", href="#", cls="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm hover:bg-blue-200"),
-                                ),
-                                cls="space-y-2"
-                            ),
-                            
-                            cls="lg:w-1/2 lg:pr-8"
-                        ),
-                        
-                        # Right side - Dashboard mockup
-                        Div(
-                            Div(
-                                # Dashboard mockup
-                                Img(
-                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f8fafc'/%3E%3Crect x='20' y='20' width='360' height='40' fill='white' rx='8'/%3E%3Crect x='30' y='30' width='60' height='20' fill='%23e2e8f0' rx='4'/%3E%3Crect x='100' y='30' width='80' height='20' fill='%23e2e8f0' rx='4'/%3E%3Crect x='20' y='80' width='170' height='200' fill='white' rx='8'/%3E%3Cpath d='M40 200 L60 180 L80 160 L100 140 L120 120 L140 100 L160 80' stroke='%2310b981' stroke-width='3' fill='none'/%3E%3Crect x='210' y='80' width='170' height='90' fill='white' rx='8'/%3E%3Ccircle cx='295' cy='125' r='30' fill='%2306b6d4'/%3E%3Ctext x='295' y='130' text-anchor='middle' fill='white' font-size='16' font-weight='bold'%3E76%3C/text%3E%3Crect x='210' y='190' width='170' height='90' fill='white' rx='8'/%3E%3C/svg%3E",
-                                    alt="AltSignals Dashboard",
-                                    cls="w-full h-auto rounded-lg shadow-2xl"
-                                ),
-                                cls="relative"
-                            ),
-                            cls="lg:w-1/2 mt-8 lg:mt-0"
-                        ),
-                        
-                        cls="flex flex-col lg:flex-row items-center"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="bg-gradient-to-br from-gray-50 to-white py-16 lg:py-24"
+                                cls="hero-content",
+                                children=[
+                                    Div(
+                                        cls="hero-text",
+                                        children=[
+                                            H1("Make Better Investment Decisions With Better Data"),
+                                            P("Get unique AI stock picks, stock alerts, and thousands of alternative insights. Complement your due diligence with AltSignals."),
+                                            
+                                            Div(
+                                                cls="search-bar",
+                                                children=[
+                                                    Input(placeholder="Search Stocks & Companies", cls="search-input"),
+                                                    Button("🔍", cls="btn-secondary"),
+                                                ]
+                                            ),
+                                            
+                                            P("Or ", A("Sign up", href="#", style="color: #dc2626; font-weight: 600;"), " (for free) to get started."),
+                                            
+                                            Div(
+                                                cls="tag-group",
+                                                children=[
+                                                    Span("Popular Stocks:", cls="tag-label"),
+                                                    A("Tesla", href="#", cls="tag tag-blue"),
+                                                    A("Apple", href="#", cls="tag tag-green"),
+                                                    A("Nvidia", href="#", cls="tag tag-purple"),
+                                                ]
+                                            ),
+                                            
+                                            Div(
+                                                cls="tag-group",
+                                                children=[
+                                                    Span("Trending Stocks:", cls="tag-label"),
+                                                    A("Reddit Stocks", href="#", cls="tag tag-orange"),
+                                                    A("Top Gainers", href="#", cls="tag tag-pink"),
+                                                    A("Penny Stocks", href="#", cls="tag tag-yellow"),
+                                                ]
+                                            ),
+                                            
+                                            Div(
+                                                cls="tag-group",
+                                                children=[
+                                                    Span("Popular Crypto:", cls="tag-label"),
+                                                    A("Bitcoin", href="#", cls="tag tag-yellow"),
+                                                    A("Ethereum", href="#", cls="tag tag-blue"),
+                                                ]
+                                            ),
+                                        ]
+                                    ),
+                                    
+                                    Div(
+                                        cls="dashboard-mockup",
+                                        children=[
+                                            Div(
+                                                cls="dashboard-header",
+                                                children=[
+                                                    Span("AltSignals Dashboard", cls="dashboard-title"),
+                                                    Div(cls="status-dot")
+                                                ]
+                                            ),
+                                            Div(
+                                                cls="chart-area",
+                                                children=[
+                                                    Div(cls="chart-line")
+                                                ]
+                                            ),
+                                            Div(
+                                                cls="stats-grid",
+                                                children=[
+                                                    Div(
+                                                        children=[
+                                                            Div("76%", cls="stat-value"),
+                                                            Div("Win Rate", cls="stat-label")
+                                                        ]
+                                                    ),
+                                                    Div(
+                                                        children=[
+                                                            Div("$2.4M", cls="stat-value"),
+                                                            Div("Portfolio", cls="stat-label")
+                                                        ]
+                                                    ),
+                                                ]
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
-            # Data Insights Cards
+            # Cards Section
             Section(
-                Div(
-                    # Sentiment cards row
+                cls="cards-section",
+                children=[
                     Div(
-                        Div(
+                        cls="container",
+                        children=[
                             Div(
-                                Span("Sentiment", cls="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full"),
-                                H3("Lucid Motors (LCID)", cls="font-bold text-gray-900 mt-2"),
-                                Div(
-                                    Span("51", cls="text-2xl font-bold text-gray-900"),
-                                    Span("9.8%", cls="text-green-500 font-medium ml-2"),
-                                    cls="flex items-baseline mt-1"
-                                ),
-                                cls="p-4"
-                            ),
-                            cls="bg-white rounded-lg shadow-md border border-gray-200 card-hover"
-                        ),
-                        
-                        Div(
-                            Div(
-                                Span("Reddit Mentions", cls="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded-full"),
-                                H3("SPDR S&P 500 ETF (SPY)", cls="font-bold text-gray-900 mt-2"),
-                                Div(
-                                    Span("654", cls="text-2xl font-bold text-gray-900"),
-                                    Span("142.5%", cls="text-green-500 font-medium ml-2"),
-                                    cls="flex items-baseline mt-1"
-                                ),
-                                cls="p-4"
-                            ),
-                            cls="bg-white rounded-lg shadow-md border border-gray-200 card-hover"
-                        ),
-                        
-                        Div(
-                            Div(
-                                Span("Job Posts", cls="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full"),
-                                H3("Mondelez (MDLZ)", cls="font-bold text-gray-900 mt-2"),
-                                Div(
-                                    Span("1,599", cls="text-2xl font-bold text-gray-900"),
-                                    Span("30.5%", cls="text-green-500 font-medium ml-2"),
-                                    cls="flex items-baseline mt-1"
-                                ),
-                                cls="p-4"
-                            ),
-                            cls="bg-white rounded-lg shadow-md border border-gray-200 card-hover"
-                        ),
-                        
-                        Div(
-                            Div(
-                                Span("Employee Business Outlook", cls="text-xs font-medium text-pink-600 bg-pink-100 px-2 py-1 rounded-full"),
-                                H3("Cincinnati Financial (CINF)", cls="font-bold text-gray-900 mt-2"),
-                                Div(
-                                    Span("68", cls="text-2xl font-bold text-gray-900"),
-                                    Span("12.8%", cls="text-green-500 font-medium ml-2"),
-                                    cls="flex items-baseline mt-1"
-                                ),
-                                cls="p-4"
-                            ),
-                            cls="bg-white rounded-lg shadow-md border border-gray-200 card-hover"
-                        ),
-                        
-                        cls="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 bg-gray-50"
+                                cls="cards-grid",
+                                children=[
+                                    Div(
+                                        cls="card",
+                                        children=[
+                                            Span("Sentiment", cls="card-badge badge-purple"),
+                                            H3("Lucid Motors (LCID)", cls="card-title"),
+                                            Span("51", cls="card-value"),
+                                            Span("9.8%", cls="card-change"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="card",
+                                        children=[
+                                            Span("Reddit Mentions", cls="card-badge badge-orange"),
+                                            H3("SPDR S&P 500 ETF (SPY)", cls="card-title"),
+                                            Span("654", cls="card-value"),
+                                            Span("142.5%", cls="card-change"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="card",
+                                        children=[
+                                            Span("Job Posts", cls="card-badge badge-green"),
+                                            H3("Mondelez (MDLZ)", cls="card-title"),
+                                            Span("1,599", cls="card-value"),
+                                            Span("30.5%", cls="card-change"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="card",
+                                        children=[
+                                            Span("Employee Outlook", cls="card-badge badge-pink"),
+                                            H3("Cincinnati Financial (CINF)", cls="card-title"),
+                                            Span("68", cls="card-value"),
+                                            Span("12.8%", cls="card-change"),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
             # Better Investments Section
             Section(
-                Div(
+                cls="section",
+                children=[
                     Div(
-                        # Left side - Content
-                        Div(
-                            H2("Better Investments with Better Data", cls="text-3xl md:text-4xl font-bold text-gray-900 mb-6"),
-                            P("At AltSignals, we go beyond traditional financial data in our investment analysis, integrating a variety of alternative data points to provide a more comprehensive view. Our unique methodology encompasses insights such as job postings, website traffic, customer satisfaction, app downloads, and social media trends, in addition to our rigorous financial and technical insights and analysis. This multifaceted approach enables us to uncover unique investment opportunities and help our users make more informed investments.", cls="text-lg text-gray-600 mb-8 leading-relaxed"),
-                            A("Sign up", href="#", cls="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium text-lg"),
-                            cls="lg:w-1/2 lg:pr-8"
-                        ),
-                        
-                        # Right side - Dashboard image
-                        Div(
-                            Img(
-                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 400'%3E%3Crect width='500' height='400' fill='%23111827' rx='12'/%3E%3Crect x='20' y='20' width='460' height='50' fill='%231f2937' rx='8'/%3E%3Crect x='30' y='30' width='100' height='30' fill='%2310b981' rx='4'/%3E%3Crect x='140' y='30' width='80' height='30' fill='%23374151' rx='4'/%3E%3Crect x='20' y='90' width='460' height='280' fill='%231f2937' rx='8'/%3E%3Cpath d='M50 300 L100 250 L150 200 L200 180 L250 160 L300 140 L350 120 L400 100 L450 80' stroke='%2310b981' stroke-width='4' fill='none'/%3E%3Cpath d='M50 320 L450 320' stroke='%23374151' stroke-width='2'/%3E%3Cpath d='M50 80 L50 320' stroke='%23374151' stroke-width='2'/%3E%3Ccircle cx='400' cy='200' r='60' fill='%2306b6d4'/%3E%3Ctext x='400' y='210' text-anchor='middle' fill='white' font-size='24' font-weight='bold'%3E76%3C/text%3E%3C/svg%3E",
-                                alt="AltSignals Analytics Dashboard",
-                                cls="w-full h-auto rounded-lg shadow-xl"
-                            ),
-                            cls="lg:w-1/2 mt-8 lg:mt-0"
-                        ),
-                        
-                        cls="flex flex-col lg:flex-row items-center"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 lg:py-24 bg-white"
+                        cls="container",
+                        children=[
+                            Div(
+                                cls="two-column",
+                                children=[
+                                    Div(
+                                        children=[
+                                            H2("Better Investments with Better Data", cls="section-title"),
+                                            P("At AltSignals, we go beyond traditional financial data in our investment analysis, integrating a variety of alternative data points to provide a more comprehensive view. Our unique methodology encompasses insights such as job postings, website traffic, customer satisfaction, app downloads, and social media trends.", cls="section-text"),
+                                            A("Sign up", href="#", cls="btn-primary"),
+                                        ]
+                                    ),
+                                    Div(
+                                        style="background: #1f2937; border-radius: 1rem; padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.15);",
+                                        children=[
+                                            Div(
+                                                style="background: #374151; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1rem; height: 120px; position: relative;",
+                                                children=[
+                                                    Div(style="position: absolute; top: 50%; left: 10%; right: 10%; height: 3px; background: linear-gradient(90deg, #10b981, #059669); border-radius: 2px; transform: translateY(-50%);")
+                                                ]
+                                            ),
+                                            Div(
+                                                style="display: flex; justify-content: center;",
+                                                children=[
+                                                    Div(
+                                                        style="background: #06b6d4; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem;",
+                                                        children=["76%"]
+                                                    )
+                                                ]
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
             # Stats Section
             Section(
-                Div(
+                cls="section section-dark",
+                children=[
                     Div(
-                        Div(
-                            H3("40k+", cls="text-4xl md:text-5xl font-bold text-white mb-2"),
-                            P("registered members", cls="text-blue-200"),
-                            cls="text-center"
-                        ),
-                        Div(
-                            H3("100+", cls="text-4xl md:text-5xl font-bold text-white mb-2"),
-                            P("unique daily stock alerts", cls="text-blue-200"),
-                            cls="text-center"
-                        ),
-                        Div(
-                            H3("High", cls="text-4xl md:text-5xl font-bold text-white mb-2"),
-                            P("win-rate on AI Stock picks", cls="text-blue-200"),
-                            cls="text-center"
-                        ),
-                        Div(
-                            H3("100k+", cls="text-4xl md:text-5xl font-bold text-white mb-2"),
-                            P("daily insights", cls="text-blue-200"),
-                            cls="text-center"
-                        ),
-                        cls="grid grid-cols-2 lg:grid-cols-4 gap-8"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="bg-slate-800 py-16 lg:py-20"
-            ),
-            
-            # Impactful Insights Section
-            Section(
-                Div(
-                    H2("Impactful Insights and Alerts", cls="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center"),
-                    P("At AltSignals, we offer cutting-edge solutions that enables you to stay informed of any developments related to companies in your portfolio. By signing up with us, you'll get impactful stock alerts whenever a company experiences a surge in popularity on social media platforms such as Reddit, an uptick in webpage traffic, or a shift in employee satisfaction levels, among other critical indicators.", cls="text-lg text-gray-600 mb-8 text-center max-w-4xl mx-auto leading-relaxed"),
-                    Div(
-                        A("Sign up", href="#", cls="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium text-lg"),
-                        cls="text-center"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 lg:py-24 bg-gray-50"
+                        cls="container",
+                        children=[
+                            Div(
+                                cls="stats-grid-large",
+                                children=[
+                                    Div(
+                                        cls="text-center",
+                                        children=[
+                                            H3("40k+", cls="stat-large"),
+                                            P("registered members", cls="stat-desc"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="text-center",
+                                        children=[
+                                            H3("100+", cls="stat-large"),
+                                            P("unique daily stock alerts", cls="stat-desc"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="text-center",
+                                        children=[
+                                            H3("High", cls="stat-large"),
+                                            P("win-rate on AI Stock picks", cls="stat-desc"),
+                                        ]
+                                    ),
+                                    Div(
+                                        cls="text-center",
+                                        children=[
+                                            H3("100k+", cls="stat-large"),
+                                            P("daily insights", cls="stat-desc"),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
             # AI Stock Picks Section
             Section(
-                Div(
-                    H2("Unique AI stock picks", cls="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center"),
-                    P("Unlock smarter investing with AltSignals' AI Stock Picks. Boasting a 80% win rate, our advanced algorithms sift through thousands of stocks daily, offering you top-notch buy or sell signals. We don't just rely on traditional financial data – we delve deeper. By harnessing the power of both traditional and alternative data – from social media trends, to employee sentiment, to user trends – we paint a fuller picture, enabling sharper, more informed investment decisions.", cls="text-lg text-gray-600 mb-6 text-center max-w-4xl mx-auto leading-relaxed"),
-                    P("With AltSignals, you're not just keeping pace; you're staying ahead of the curve, armed with the insights that matter.", cls="text-lg text-gray-600 mb-8 text-center max-w-4xl mx-auto leading-relaxed"),
+                cls="section",
+                children=[
                     Div(
-                        A("Sign up", href="#", cls="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium text-lg"),
-                        cls="text-center"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 lg:py-24 bg-white"
+                        cls="container text-center",
+                        children=[
+                            H2("Unique AI stock picks", cls="section-title"),
+                            P("Unlock smarter investing with AltSignals' AI Stock Picks. Boasting a 80% win rate, our advanced algorithms sift through thousands of stocks daily, offering you top-notch buy or sell signals.", cls="section-text"),
+                            P("With AltSignals, you're not just keeping pace; you're staying ahead of the curve, armed with the insights that matter.", cls="section-text"),
+                            A("Sign up", href="#", cls="btn-primary"),
+                        ]
+                    )
+                ]
             ),
             
             # Testimonial Section
             Section(
-                Div(
-                    H2("Don't take our word for it. Take theirs.", cls="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center"),
+                cls="section section-alt",
+                children=[
                     Div(
-                        Div(
-                            P("As an investor who has just started this year, I've tried various Stock websites, but Altindex is the best alternative data provider. It offers invaluable insights, which I haven't seen other websites offer, and even allows me to see lobbying costs. Also, I have heard the AI-backed stock picking service has consistently delivered impressive results, and the stock portfolio alerts are great, so I see my portfolio performance relative to the market.", cls="text-lg text-gray-700 mb-6 italic leading-relaxed"),
+                        cls="container",
+                        children=[
+                            H2("Don't take our word for it. Take theirs.", style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin-bottom: 3rem; text-align: center;"),
                             Div(
-                                P("Kenneth Thakur", cls="font-bold text-gray-900"),
-                                P("Retail investor", cls="text-gray-600"),
-                                cls="text-left"
-                            ),
-                            cls="p-8"
-                        ),
-                        cls="bg-white rounded-xl shadow-lg border border-gray-200 max-w-4xl mx-auto"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 lg:py-24 bg-gray-50"
+                                cls="testimonial",
+                                children=[
+                                    P("As an investor who has just started this year, I've tried various Stock websites, but AltSignals is the best alternative data provider. It offers invaluable insights, which I haven't seen other websites offer, and the AI-backed stock picking service has consistently delivered impressive results.", cls="testimonial-text"),
+                                    Div(
+                                        cls="testimonial-author",
+                                        children=[
+                                            Div("KT", cls="author-avatar"),
+                                            Div(
+                                                children=[
+                                                    P("Kenneth Thakur", cls="author-name"),
+                                                    P("Retail investor", cls="author-title"),
+                                                ]
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
             ),
             
             # Final CTA Section
             Section(
-                Div(
-                    H2("Made it all the way down here?", cls="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center"),
-                    P("Then it's time to try AltSignals and to make more informed investments.", cls="text-xl text-gray-600 mb-2 text-center"),
-                    P("Every day we find thousands of insights and we bring everything to you in an easy-to-use dashboard.", cls="text-lg text-gray-600 mb-8 text-center"),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="py-16 lg:py-24 bg-white"
+                cls="section text-center",
+                children=[
+                    Div(
+                        cls="container",
+                        children=[
+                            H2("Made it all the way down here?", cls="section-title"),
+                            P("Then it's time to try AltSignals and to make more informed investments.", style="font-size: 1.25rem; color: #6b7280; margin-bottom: 0.5rem;"),
+                            P("Every day we find thousands of insights and we bring everything to you in an easy-to-use dashboard.", style="font-size: 1.125rem; color: #6b7280; margin-bottom: 2rem;"),
+                        ]
+                    )
+                ]
             ),
             
             # Footer
             Footer(
-                Div(
+                cls="footer",
+                children=[
                     Div(
-                        P("© 2025 AltSignals. All rights reserved.", cls="text-gray-600 text-center"),
-                        cls="border-t border-gray-200 pt-8"
-                    ),
-                    cls="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                ),
-                cls="bg-gray-50 py-8"
+                        cls="container",
+                        children=[
+                            P("© 2025 AltSignals. All rights reserved.")
+                        ]
+                    )
+                ]
             ),
-            
-            cls="min-h-screen bg-white"
         )
     )
 

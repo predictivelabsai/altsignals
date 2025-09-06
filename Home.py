@@ -267,7 +267,7 @@ def display_stock_metrics(data, symbols):
             
             with cols[i]:
                 st.metric(
-                    label=symbol,
+                    label=f"{symbol} (REAL DATA)",
                     value=f"${current_price:.2f}",
                     delta=f"{change_pct:.2f}%"
                 )
@@ -432,8 +432,8 @@ def main():
     
     # Footer
     st.markdown("---")
-    st.markdown("**AltSignals Platform** | Data sources: Yahoo Finance, Polygon.io | Sentiment: OpenAI GPT-4")
-    st.markdown("⚠️ *Some data may be marked as SYNTHETIC for testing purposes*")
+    st.markdown("**AltSignals Platform** | 📊 **REAL DATA**: Yahoo Finance, Polygon.io | 🤖 **AI ANALYSIS**: OpenAI GPT-4 | 💭 **SYNTHETIC DATA**: Generated for testing")
+    st.markdown("⚠️ *Market data is REAL from live APIs. Sentiment analysis uses REAL news data. Some demo features may use SYNTHETIC data for testing.*")
 
 if __name__ == "__main__":
     main()
